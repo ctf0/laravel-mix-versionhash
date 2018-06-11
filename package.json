@@ -1,0 +1,22 @@
+{
+    "license": "MIT",
+    "version": "1.0.0",
+    "author": "ctf0",
+    "name": "laravel-mix-versionhash",
+    "main": "src/index.js",
+    "description": "auto append hash to file name",
+    "homepage": "https://github.com/ctf0/laravel-mix-versionhash",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ctf0/laravel-mix-versionhash.git"
+    },
+    "peerDependecies": {
+        "laravel-mix": "^2.0.0"
+    },
+    "keywords": [
+        "laravel",
+        "mix",
+        "webpack",
+        "hash"
+    ]
+}
