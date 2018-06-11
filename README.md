@@ -1,6 +1,8 @@
 # laravel-mix-versionHash
 
-auto append hash to file instead of using virtual one [Read More](https://github.com/JeffreyWay/laravel-mix/issues/1022#issuecomment-382274649)
+[![npm](https://img.shields.io/npm/v/laravel-mix-versionhash.svg?style=for-the-badge)](https://www.npmjs.com/package/laravel-mix-versionhash) [![npm](https://img.shields.io/npm/dt/laravel-mix-versionhash.svg?style=for-the-badge)](https://www.npmjs.com/package/laravel-mix-versionhash)
+
+auto append hash to file instead of using virtual one [Read More](https://github.com/JeffreyWay/laravel-mix/issues/1022)
 
 ## Installation
 
