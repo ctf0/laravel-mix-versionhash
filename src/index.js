@@ -35,6 +35,17 @@ class VersionHash {
 
         webpackConfig.output.filename = `[name].[hash:${length}].js`
         webpackConfig.output.chunkFilename = `[name].[hash:${length}].js`
+
+        forIn(webpackConfig.plugins, (value, key) => {
+
+            if (value instanceof ExtractTextPlugin) {
+
+                value.filename = `[name].[contenthash:${length}].css`
+                webpackConfig.plugins[key] = value;
+
+            }
+            
+        })
     }
 }
 
