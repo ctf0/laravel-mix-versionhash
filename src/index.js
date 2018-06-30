@@ -33,8 +33,8 @@ class VersionHash {
     webpackConfig(webpackConfig) {
         let length = this.options.length
 
-        webpackConfig.output.filename = `[name].[hash:${length}].js`
-        webpackConfig.output.chunkFilename = `[name].[hash:${length}].js`
+        webpackConfig.output.filename = `[name].[chunkhash:${length}].js`
+        webpackConfig.output.chunkFilename = `[name].[chunkhash:${length}].js`
 
         forIn(webpackConfig.plugins, (value, key) => {
 
