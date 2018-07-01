@@ -37,10 +37,19 @@ class VersionHash {
         webpackConfig.output.filename = `[name].[chunkhash:${length}].js`
         webpackConfig.output.chunkFilename = `[name].[chunkhash:${length}].js`
 
+        let contenthash = `[contenthash:${length}].css`
+
         forIn(webpackConfig.plugins, (value, key) => {
             if (value instanceof ExtractTextPlugin) {
-                value.filename = `[name].[contenthash:${length}].css`
-                webpackConfig.plugins[key] = value
+                if (!value.filename.includes(contenthash)) {
+
+                    let csspath = value.filename.substring(0, value.filename.lastIndexOf("."))
+                    let filename = `/${csspath}.[contenthash:${length}].css`    
+    
+                    if (value.filename != filename) {    
+                        value.filename = filename
+                    }
+                }
             }
         })
     }
