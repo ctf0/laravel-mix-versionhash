@@ -2,6 +2,7 @@ const mix = require('laravel-mix')
 const forIn = require('lodash/forIn')
 const jsonfile = require('jsonfile')
 const removeHashFromKeyRegex = /\.(.+)\.(.+)$/g
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 class VersionHash {
     register(options = {}) {
@@ -37,14 +38,10 @@ class VersionHash {
         webpackConfig.output.chunkFilename = `[name].[chunkhash:${length}].js`
 
         forIn(webpackConfig.plugins, (value, key) => {
-
             if (value instanceof ExtractTextPlugin) {
-
                 value.filename = `[name].[contenthash:${length}].css`
-                webpackConfig.plugins[key] = value;
-
+                webpackConfig.plugins[key] = value
             }
-            
         })
     }
 }
