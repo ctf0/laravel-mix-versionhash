@@ -40,20 +40,17 @@ class VersionHash {
         let contenthash = `[contenthash:${length}].css`
 
         forIn(webpackConfig.plugins, (value, key) => {
-
             if (value instanceof ExtractTextPlugin) {
-
                 if (!value.filename.includes(contenthash)) {
 
-                    let csspath = value.filename.substring(0, value.filename.lastIndexOf("."));
+                    let csspath = value.filename.substring(0, value.filename.lastIndexOf("."))
                     let filename = `/${csspath}.[contenthash:${length}].css`    
     
                     if (value.filename != filename) {    
-                        value.filename = filename;    
+                        value.filename = filename
                     }
                 }
             }
-            
         })
     }
 }
