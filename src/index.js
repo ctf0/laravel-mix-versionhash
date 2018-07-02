@@ -17,7 +17,7 @@ class VersionHash {
 
         return mix.webpackConfig().then(() => {
             jsonfile.readFile(mixManifest, (err, obj) => {
-                const newJson = {}
+                let newJson = {}
 
                 forIn(obj, (value, key) => {
                     key = key.replace(removeHashFromKeyRegex, '.$2')
@@ -32,23 +32,23 @@ class VersionHash {
     }
 
     webpackConfig(webpackConfig) {
-        let length = this.options.length
+        const length = this.options.length
 
+        // js
         webpackConfig.output.filename = `[name].[chunkhash:${length}].js`
         webpackConfig.output.chunkFilename = `[name].[chunkhash:${length}].js`
 
+        // css
         let contenthash = `[contenthash:${length}].css`
 
         forIn(webpackConfig.plugins, (value, key) => {
-            if (value instanceof ExtractTextPlugin) {
-                if (!value.filename.includes(contenthash)) {
+            if (value instanceof ExtractTextPlugin && !value.filename.includes(contenthash)) {
 
-                    let csspath = value.filename.substring(0, value.filename.lastIndexOf("."))
-                    let filename = `/${csspath}.[contenthash:${length}].css`    
-    
-                    if (value.filename != filename) {    
-                        value.filename = filename
-                    }
+                let csspath = value.filename.substring(0, value.filename.lastIndexOf('.'))
+                let filename = `${csspath}.[contenthash:${length}].css`
+
+                if (value.filename != filename) {
+                    value.filename = filename
                 }
             }
         })
