@@ -13,9 +13,9 @@ class VersionHash {
             options
         )
 
-        let delimiter = this.options.delimiter.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+        let delimiter = this.getDelimiter()
         const mixManifest = `${Config.publicPath}/mix-manifest.json`
-        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\\.(.+)$', 'g');
+        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\\.(.+)$', 'g')
 
         return mix.webpackConfig().then(() => {
             jsonfile.readFile(mixManifest, (err, obj) => {
@@ -33,9 +33,13 @@ class VersionHash {
         })
     }
 
+    getDelimiter() {
+        return this.options.delimiter.replace(/[^\.|\-|_]/g, '')
+    }
+
     webpackConfig(webpackConfig) {
         const length = this.options.length
-        const delimiter = this.options.delimiter
+        const delimiter = this.getDelimiter()
 
         // js
         webpackConfig.output.filename = `[name]${delimiter}[chunkhash:${length}].js`
