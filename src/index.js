@@ -1,19 +1,21 @@
 const mix = require('laravel-mix')
 const forIn = require('lodash/forIn')
 const jsonfile = require('jsonfile')
-const removeHashFromKeyRegex = /\.(.+)\.(.+)$/g
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 class VersionHash {
     register(options = {}) {
         this.options = Object.assign(
             {
-                length: 6
+                length: 6,
+                delimiter: '.'
             },
             options
         )
 
+        let delimiter = this.options.delimiter.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
         const mixManifest = `${Config.publicPath}/mix-manifest.json`
+        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\\.(.+)$', 'g');
 
         return mix.webpackConfig().then(() => {
             jsonfile.readFile(mixManifest, (err, obj) => {
@@ -33,10 +35,11 @@ class VersionHash {
 
     webpackConfig(webpackConfig) {
         const length = this.options.length
+        const delimiter = this.options.delimiter
 
         // js
-        webpackConfig.output.filename = `[name].[chunkhash:${length}].js`
-        webpackConfig.output.chunkFilename = `[name].[chunkhash:${length}].js`
+        webpackConfig.output.filename = `[name]${delimiter}[chunkhash:${length}].js`
+        webpackConfig.output.chunkFilename = `[name]${delimiter}[chunkhash:${length}].js`
 
         // css
         let contenthash = `[contenthash:${length}].css`
@@ -45,7 +48,7 @@ class VersionHash {
             if (value instanceof ExtractTextPlugin && !value.filename.includes(contenthash)) {
 
                 let csspath = value.filename.substring(0, value.filename.lastIndexOf('.'))
-                let filename = `${csspath}.[contenthash:${length}].css`
+                let filename = `${csspath}${delimiter}[contenthash:${length}].css`
 
                 if (value.filename != filename) {
                     value.filename = filename
