@@ -34,7 +34,7 @@ class VersionHash {
     }
 
     getDelimiter() {
-        return this.options.delimiter.replace(/[^\.|\-|_]/g, '')
+        return this.options.delimiter.replace(/[^\.|\-|_]/g, '') || '.'
     }
 
     webpackConfig(webpackConfig) {
