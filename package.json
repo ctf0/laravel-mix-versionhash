@@ -1,6 +1,6 @@
 {
     "license": "MIT",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "ctf0",
     "name": "laravel-mix-versionhash",
     "main": "src/index.js",
