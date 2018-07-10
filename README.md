@@ -20,7 +20,7 @@ mix.versionHash();
 
 ## Options
 
-| option    | type    | default      |      description                    |
-|-----------|---------|--------------|-------------------------------------|
-| length    | int     | `6`          | the hash string length              |
-| delimiter | string  | `'.'`        | the delimiter for filename and hash |
+|   option  |  type  | default |                                            description                                            |
+|-----------|--------|---------|---------------------------------------------------------------------------------------------------|
+| length    | int    | `6`     | the hash string length                                                                            |
+| delimiter | string | `'.'`   | the delimiter for filename and hash, <br> note that anything other than `., -, _` will be removed |
