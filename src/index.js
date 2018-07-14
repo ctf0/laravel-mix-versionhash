@@ -8,21 +8,26 @@ class VersionHash {
         this.options = Object.assign(
             {
                 length: 6,
-                delimiter: '.'
+                delimaiter: '.'
             },
             options
         )
 
         let delimiter = this.getDelimiter()
         const mixManifest = `${Config.publicPath}/mix-manifest.json`
-        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\\.(.+)$', 'g')
+        const removeHashFromKeyRegex = new RegExp('(.*)\\' + delimiter + '(.*)\\.(.*)$', 'g')
+        const removeHashFromKeyRegexWithMap = new RegExp('(.*)\\' + delimiter + '(.*)\\.(.*)\.map$', 'g')
 
         return mix.webpackConfig().then(() => {
             jsonfile.readFile(mixManifest, (err, obj) => {
                 let newJson = {}
 
                 forIn(obj, (value, key) => {
-                    key = key.replace(removeHashFromKeyRegex, '.$2')
+                    if(key.endsWith('.map')) {
+                        key = key.replace(removeHashFromKeyRegexWithMap, '$1.$3.map')
+                    } else {
+                        key = key.replace(removeHashFromKeyRegex, '$1.$3')
+                    }
                     newJson[key] = value
                 })
 
