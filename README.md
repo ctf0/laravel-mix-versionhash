@@ -18,6 +18,8 @@ require('laravel-mix-versionhash')
 mix.versionHash();
 ```
 
+- for removeing old files use [Clean for WebPack](https://github.com/johnagan/clean-webpack-plugin)
+
 ## Options
 
 |   option  |  type  | default |                                            description                                            |
