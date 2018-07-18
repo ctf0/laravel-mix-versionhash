@@ -3,6 +3,7 @@ const forIn = require('lodash/forIn')
 const jsonfile = require('jsonfile')
 const escapeStringRegexp = require('escape-string-regexp')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const path = require('path')
 const DD = '.'
 
 class VersionHash {
@@ -40,7 +41,7 @@ class VersionHash {
     }
 
     dependencies() {
-        return ['jsonfile', 'escape-string-regexp']
+        return ['jsonfile', 'escape-string-regexp', 'path']
     }
 
     webpackConfig(webpackConfig) {
@@ -51,7 +52,13 @@ class VersionHash {
         let chunkhash = `[name]${delimiter}[chunkhash:${length}].js`
 
         webpackConfig.output.filename = chunkhash
-        webpackConfig.output.chunkFilename = chunkhash
+        if(webpackConfig.output.chunkFilename) {
+          // merge chunkFilename paths
+          var directory = path.dirname(webpackConfig.output.chunkFilename)
+          webpackConfig.output.chunkFilename = directory + '/' + chunkhash
+        } else {
+          webpackConfig.output.chunkFilename = chunkhash
+        }
 
         // css
         let contenthash = `[contenthash:${length}].css`
