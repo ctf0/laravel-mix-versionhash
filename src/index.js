@@ -52,12 +52,13 @@ class VersionHash {
         let chunkhash = `[name]${delimiter}[chunkhash:${length}].js`
 
         webpackConfig.output.filename = chunkhash
-        if(webpackConfig.output.chunkFilename) {
+        
+        if (webpackConfig.output.chunkFilename) {
           // merge chunkFilename paths
-          var directory = path.dirname(webpackConfig.output.chunkFilename)
-          webpackConfig.output.chunkFilename = directory + '/' + chunkhash
+            let directory = path.dirname(webpackConfig.output.chunkFilename)
+            webpackConfig.output.chunkFilename = `${directory}/${chunkhash}`
         } else {
-          webpackConfig.output.chunkFilename = chunkhash
+            webpackConfig.output.chunkFilename = chunkhash
         }
 
         // css
