@@ -4,22 +4,23 @@ const jsonfile = require('jsonfile')
 const escapeStringRegexp = require('escape-string-regexp')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
-const DD = '.'
+const separator = '.'
 
 class VersionHash {
     register(options = {}) {
         this.options = Object.assign(
             {
                 length: 6,
-                delimiter: DD
+                delimiter: separator,
+                exclude: []
             },
             options
         )
 
         const delimiter = escapeStringRegexp(this.getDelimiter())
         const mixManifest = `${Config.publicPath}/mix-manifest.json`
-        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\\.(.+)$', 'g')
-        const removeHashFromKeyRegexWithMap = new RegExp(delimiter + '(.+)\\.(.+)\.map$', 'g')
+        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\.(.+)$', 'g')
+        const removeHashFromKeyRegexWithMap = new RegExp(delimiter + '(.+)\.(.+)\.map$', 'g')
 
         return mix.webpackConfig().then(() => {
             jsonfile.readFile(mixManifest, (err, obj) => {
@@ -52,9 +53,9 @@ class VersionHash {
         let chunkhash = `[name]${delimiter}[chunkhash:${length}].js`
 
         webpackConfig.output.filename = chunkhash
-        
+
         if (webpackConfig.output.chunkFilename) {
-          // merge chunkFilename paths
+            // merge chunkFilename paths
             let directory = path.dirname(webpackConfig.output.chunkFilename)
             webpackConfig.output.chunkFilename = `${directory}/${chunkhash}`
         } else {
@@ -78,7 +79,11 @@ class VersionHash {
     }
 
     getDelimiter() {
-        return this.options.delimiter.replace(/[^\.|\-|_]/g, '') || DD
+        return this.options.delimiter.replace(/[^\.|\-|_]/g, '') || separator
+    }
+
+    exclude(key) {
+        return this.options.exclude.includes(key)
     }
 }
 
