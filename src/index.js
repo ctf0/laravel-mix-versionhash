@@ -83,7 +83,7 @@ class VersionHash {
     }
 
     exclude(key) {
-        return this.options.exclude.includes(key)
+        return this.options.exclude.some((e) => e == key)
     }
 }
 
