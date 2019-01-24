@@ -19,8 +19,8 @@ class VersionHash {
 
         const delimiter = escapeStringRegexp(this.getDelimiter())
         const mixManifest = `${Config.publicPath}/mix-manifest.json`
-        const removeHashFromKeyRegex = new RegExp(delimiter + '(.+)\.(.+)$', 'g')
-        const removeHashFromKeyRegexWithMap = new RegExp(delimiter + '(.+)\.(.+)\.map$', 'g')
+        const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)$`, 'g')
+        const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)\\.map$`, 'g')
 
         return mix.webpackConfig().then(() => {
             jsonfile.readFile(mixManifest, (err, obj) => {
