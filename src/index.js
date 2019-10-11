@@ -18,7 +18,7 @@ class VersionHash {
         )
 
         const delimiter = escapeStringRegexp(this.getDelimiter())
-        const mixManifest = `${Config.publicPath}/mix-manifest.json`
+        const mixManifest = `${Config.publicPath}/${Mix.manifest.name}`
         const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)$`, 'g')
         const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)\\.map$`, 'g')
 
