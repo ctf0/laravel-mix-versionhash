@@ -28,6 +28,3 @@ mix.versionHash();
 |-----------|--------|---------|---------------------------------------------------------------------------------------------------|
 | length    | int    | `6`     | the hash string length                                                                            |
 | delimiter | string | `'.'`   | the delimiter for filename and hash, <br> note that anything other than `. - _` will be removed |
-
-## TODO
-- add option to exclude files from hashing.
