@@ -1,6 +1,5 @@
 const mix = require('laravel-mix')
 const forIn = require('lodash/forIn')
-const jsonfile = require('jsonfile')
 const escapeStringRegexp = require('escape-string-regexp')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
@@ -15,33 +14,8 @@ class VersionHash {
             exclude: []
         }, options)
 
-        const delimiter = escapeStringRegexp(this.getDelimiter())
-        const mixManifest = `${Config.publicPath}/${Mix.manifest.name}`
-        const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)$`, 'g')
-        const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)\\.map$`, 'g')
-
-        // remove created 'mix.js' when no 'mix.js()' is called
-        this.registerListener()
-
-        return mix.webpackConfig().then(() => {
-            jsonfile.readFile(mixManifest, (err, obj) => {
-                let newJson = {}
-
-                forIn(obj, (value, key) => {
-                    key = key.endsWith('.map')
-                        ? key.replace(removeHashFromKeyRegexWithMap, '.$2.map')
-                        : key.replace(removeHashFromKeyRegex, '.$2')
-
-                    newJson[key] = value
-                })
-
-                jsonfile.writeFile(mixManifest, newJson, {spaces: 2}, (err) => {
-                    if (err) {
-                        console.error(err)
-                    }
-                })
-            })
-        })
+        // hash the generated assets once build is complete
+        this.registerHashAssets()
     }
 
     dependencies() {
@@ -88,23 +62,26 @@ class VersionHash {
         return this.options.exclude.some((e) => e == key)
     }
 
-    registerListener() {
-        const mixFileRegex = new RegExp(`^mix${this.getDelimiter()}.{${this.options.length}}\.js$`, 'i')
+    registerHashAssets() {
+        const delimiter = escapeStringRegexp(this.getDelimiter())
+        const mixManifest = `${Config.publicPath}/${Mix.manifest.name}`
+        const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)$`, 'g')
+        const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)\\.map$`, 'g')
 
-        Mix.listen('build', (stats) => {
-            if (!Mix.bundlingJavaScript) {
-                let temporaryOutputFile = stats
-                    .toJson()
-                    .assets
-                    .find((asset) => mixFileRegex.test(asset.name))
+        Mix.listen('build', () => {
+            const file = File.find(mixManifest)
 
-                if (temporaryOutputFile) {
-                    let tempName = temporaryOutputFile.name
+            let newJson = {}
 
-                    delete stats.compilation.assets[tempName]
-                    File.find(path.resolve(Config.publicPath, tempName)).delete()
-                }
-            }
+            forIn(JSON.parse(file.read()), (value, key) => {
+                key = key.endsWith('.map')
+                    ? key.replace(removeHashFromKeyRegexWithMap, '.$2.map')
+                    : key.replace(removeHashFromKeyRegex, '.$2')
+
+                newJson[key] = value
+            })
+
+            file.write(newJson)
         })
     }
 
