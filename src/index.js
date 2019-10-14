@@ -7,6 +7,10 @@ const separator = '.'
 
 class VersionHash {
 
+    dependencies() {
+        return ['jsonfile', 'escape-string-regexp', 'path']
+    }
+    
     register(options = {}) {
         this.options = Object.assign({
             length: 6,
@@ -16,10 +20,6 @@ class VersionHash {
 
         // hash the generated assets once build is complete
         this.registerHashAssets()
-    }
-
-    dependencies() {
-        return ['jsonfile', 'escape-string-regexp', 'path']
     }
 
     webpackConfig(webpackConfig) {
@@ -64,13 +64,11 @@ class VersionHash {
 
     registerHashAssets() {
         const delimiter = escapeStringRegexp(this.getDelimiter())
-        const mixManifest = `${Config.publicPath}/${Mix.manifest.name}`
         const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)$`, 'g')
         const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)\\.map$`, 'g')
 
         Mix.listen('build', () => {
-            const file = File.find(mixManifest)
-
+            const file = File.find(`${Config.publicPath}/${Mix.manifest.name}`)
             let newJson = {}
 
             forIn(JSON.parse(file.read()), (value, key) => {
