@@ -98,6 +98,40 @@ class VersionHash {
     }
 
     /**
+     * Update backslashes to forward slashes for consistency.
+     *
+      * @return {Object}
+     */
+    webpackPlugins() {
+
+        const combinedFiles = this.combinedFiles;
+
+        return new class {
+
+            apply(compiler) {
+
+                compiler.plugin('done', stats => {
+
+                    forIn(stats.compilation.assets, (asset, path) => {
+
+                        if (combinedFiles[path]) {
+
+                            delete stats.compilation.assets[path];
+                            stats.compilation.assets[path.replace(/\\/g, '/')] = asset;
+
+                        }
+
+                    })
+
+                });
+
+            }
+
+        };
+
+    }
+
+    /**
      * Get configured delimiter with appropriate filtering.
      *
      * @return {String}
@@ -156,7 +190,7 @@ class VersionHash {
      */
     hashForCombine() {
 
-        const combinedFiles = {};
+        this.combinedFiles = {};
 
         // hook into Mix's task collection to update file name hashes
         proxyMethod.before(Mix, 'addTask', task => {
@@ -170,39 +204,11 @@ class VersionHash {
                     const hashed = file.rename(`${file.nameWithoutExtension()}${hash}${file.extension()}`);
                     task.assets.push(hashed);
 
-                    combinedFiles[hashed.pathFromPublic()] = true;
+                    this.combinedFiles[hashed.pathFromPublic()] = true;
 
                 });
 
             }
-
-        });
-
-        // update backslashes to forward slashes for consistency
-        Mix.listen('loading-plugins', plugins => {
-
-            plugins.push(new class {
-
-                apply(compiler) {
-
-                    compiler.plugin('done', stats => {
-
-                        forIn(stats.compilation.assets, (asset, path) => {
-
-                            if (combinedFiles[path]) {
-
-                                delete stats.compilation.assets[path];
-                                stats.compilation.assets[path.replace(/\\/g, '/')] = asset;
-
-                            }
-
-                        })
-
-                    });
-
-                }
-
-            });
 
         });
 
