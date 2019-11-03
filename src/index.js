@@ -32,7 +32,12 @@ class VersionHash {
      * @return {String[]}
      */
     dependencies() {
-        return ['jsonfile', 'escape-string-regexp', 'path']
+        return [
+            'jsonfile', 
+            'escape-string-regexp', 
+            'path', 
+            'proxy-method
+        ]
     }
 
     /**
