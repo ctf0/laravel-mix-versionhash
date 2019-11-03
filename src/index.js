@@ -19,13 +19,11 @@ class VersionHash {
      * Constructor.
      */
     constructor() {
-
         // hash the generated assets once build is complete
         this.registerHashAssets()
 
         // look for instances of combining file(s)
         this.hashForCombine()
-
     }
 
     /**
@@ -43,13 +41,11 @@ class VersionHash {
      * @param {{length: {Number}, delimiter: {String}, exclude: {String[]}}} options
      */
     register(options = {}) {
-
         this.options = Object.assign({
             length: 6,
             delimiter: separator,
             exclude: []
         }, options)
-
     }
 
     /**
@@ -58,7 +54,6 @@ class VersionHash {
      * @param {Object} webpackConfig
      */
     webpackConfig(webpackConfig) {
-
         const length = this.options.length
         const delimiter = this.getDelimiter()
 
@@ -94,7 +89,6 @@ class VersionHash {
             }
 
         })
-
     }
 
     /**
@@ -103,30 +97,19 @@ class VersionHash {
       * @return {Object}
      */
     webpackPlugins() {
-
         const combinedFiles = this.combinedFiles
 
         return new class {
-
             apply(compiler) {
-
                 compiler.plugin('done', stats => {
-
                     forIn(stats.compilation.assets, (asset, path) => {
-
                         if (combinedFiles[path]) {
-
                             delete stats.compilation.assets[path]
                             stats.compilation.assets[path.replace(/\\/g, '/')] = asset
-
                         }
-
                     })
-
                 })
-
             }
-
         }
 
     }
@@ -137,7 +120,7 @@ class VersionHash {
      * @return {String}
      */
     getDelimiter() {
-        return this.options.delimiter.replace(/[^.|\-_]/g, '') || separator
+        return this.options.delimiter.replace(/[^.\-_]/g, '') || separator
     }
 
     /**
@@ -153,18 +136,16 @@ class VersionHash {
      * @return {this}
      */
     registerHashAssets() {
-
         Mix.listen('build', () => {
-
+            let op_length = this.options.length
             const delimiter = escapeStringRegexp(this.getDelimiter())
-            const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)$`, 'g')
-            const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${this.options.length}})\\.([^.]+)\\.map$`, 'g')
-
+            const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${op_length}})\\.([^.]+)$`, 'g')
+            const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${op_length}})\\.([^.]+)\\.map$`, 'g')
+            
             const file = File.find(`${Config.publicPath}/${Mix.manifest.name}`)
             let newJson = {}
 
             forIn(JSON.parse(file.read()), (value, key) => {
-
                 if (key.endsWith('.map')) {
                     key = key.replace(removeHashFromKeyRegexWithMap, '.$2.map')
                 } else {
@@ -172,15 +153,12 @@ class VersionHash {
                 }
 
                 newJson[key] = value
-
             })
 
             file.write(newJson)
-
         })
 
         return this
-
     }
 
     /**
@@ -189,33 +167,24 @@ class VersionHash {
      * @return {this}
      */
     hashForCombine() {
-
         this.combinedFiles = {}
 
         // hook into Mix's task collection to update file name hashes
         proxyMethod.before(Mix, 'addTask', task => {
-
             if (task instanceof ConcatenateFilesTask) {
-
                 proxyMethod.after(task, 'merge', () => {
-
                     const file = task.assets.pop()
                     const hash = `${this.getDelimiter()}${file.version().substr(0, this.options.length)}`
                     const hashed = file.rename(`${file.nameWithoutExtension()}${hash}${file.extension()}`)
+
                     task.assets.push(hashed)
-
                     this.combinedFiles[hashed.pathFromPublic()] = true
-
                 })
-
             }
-
         })
 
         return this
-
     }
-
 }
 
 mix.extend('versionHash', new VersionHash())
