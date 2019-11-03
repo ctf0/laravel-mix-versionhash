@@ -13,6 +13,9 @@
     "peerDependecies": {
         "laravel-mix": "^2.0.0"
     },
+    "dependencies": {
+        "proxy-method": "^1.0.0"
+    },
     "keywords": [
         "laravel",
         "mix",
