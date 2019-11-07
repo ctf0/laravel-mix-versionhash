@@ -1,6 +1,6 @@
 {
     "license": "MIT",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "author": "ctf0",
     "name": "laravel-mix-versionhash",
     "main": "src/index.js",
@@ -10,7 +10,7 @@
         "type": "git",
         "url": "https://github.com/ctf0/laravel-mix-versionhash.git"
     },
-    "dependencies" : {
+    "dependencies": {
         "proxy-method": "^1.0.0"
     },
     "peerDependecies": {
