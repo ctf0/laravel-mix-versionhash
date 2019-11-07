@@ -10,6 +10,9 @@
         "type": "git",
         "url": "https://github.com/ctf0/laravel-mix-versionhash.git"
     },
+    "dependencies" : {
+        "proxy-method": "^1.0.0"
+    },
     "peerDependecies": {
         "laravel-mix": "^2.0.0"
     },
