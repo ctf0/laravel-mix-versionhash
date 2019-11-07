@@ -36,7 +36,7 @@ class VersionHash {
             'jsonfile', 
             'escape-string-regexp', 
             'path', 
-            'proxy-method
+            'proxy-method'
         ]
     }
 
