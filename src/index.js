@@ -94,6 +94,70 @@ class VersionHash {
             }
 
         })
+
+        // files inside css
+        forIn(webpackConfig.module.rules, rule => {
+            // check if the rule is /(\.(png|jpe?g|gif|webp)$|^((?!font).)*\.svg$)/
+            if ('.png'.match(new RegExp(rule.test))) {
+                forIn(rule.loaders, loader => {
+                    if (loader.loader === 'file-loader') {
+                        loader.options.name = (path) => {
+                            if (!/node_modules|bower_components/.test(path)) {
+                                return (
+                                    Config.fileLoaderDirs.images + `/[name].[hash:${length}].[ext]`
+                                )
+                            }
+
+                            return (
+                                Config.fileLoaderDirs.images +
+                                '/vendor/' +
+                                path
+                                    .replace(/\\/g, '/')
+                                    .replace(
+                                        /((.*(node_modules|bower_components))|images|image|img|assets)\//g,
+                                        ''
+                                    ) +
+                                `?[hash:${length}]`
+                            )
+                        }
+                    }
+                })
+            }
+
+            // check if the rule is /(\.(woff2?|ttf|eot|otf)$|font.*\.svg$)/
+            if ('.woff'.match(new RegExp(rule.test))) {
+                forIn(rule.loaders, loader => {
+                    if (loader.loader === 'file-loader') {
+                        loader.options.name = (path) => {
+                            if (!/node_modules|bower_components/.test(path)) {
+                                return Config.fileLoaderDirs.fonts + `/[name].[hash:${length}].[ext]`
+                            }
+
+                            return (
+                                Config.fileLoaderDirs.fonts +
+                                '/vendor/' +
+                                path
+                                    .replace(/\\/g, '/')
+                                    .replace(
+                                        /((.*(node_modules|bower_components))|fonts|font|assets)\//g,
+                                        ''
+                                    ) +
+                                `?[hash:${length}]`
+                            )
+                        }
+                    }
+                })
+            }
+
+            // check if the rule is /\.(cur|ani)$/
+            if ('.cur'.match(new RegExp(rule.test))) {
+                forIn(rule.loaders, loader => {
+                    if (loader.loader === 'file-loader') {
+                        loader.options.name = `[name].[hash:${length}].[ext]`
+                    }
+                })
+            }
+        })
     }
 
     /**
