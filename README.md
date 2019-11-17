@@ -22,6 +22,23 @@ mix.versionHash();
 
 - for removing old files use [Clean for WebPack](https://github.com/johnagan/clean-webpack-plugin)
 
+### Bug when combined with BrowserSync
+
+Currently (2019-11-17), there's a bug which causes BrowserSync to not start
+after compiling the code. There is a small hotfix for this, while this bug gets
+looked into.
+
+```js
+const mix = require('laravel-mix')
+
+// …
+
+if (mix.inProduction()) {
+  require('laravel-mix-versionhash')
+  mix.versionHash()
+}
+```
+
 ## Options
 
 |   option  |  type  | default |                                            description                                            |
