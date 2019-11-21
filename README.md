@@ -22,15 +22,23 @@ mix.versionHash();
 
 - for removing old files use [Clean for WebPack](https://github.com/johnagan/clean-webpack-plugin)
 
+## Options
+
+|   option  |  type  | default |                                            description                                            |
+|-----------|--------|---------|---------------------------------------------------------------------------------------------------|
+| length    | int    | `6`     | the hash string length                                                                            |
+| delimiter | string | `'.'`   | the delimiter for filename and hash, <br> note that anything other than `. - _` will be removed |
+
+
+
+## Known Issues
+
 ### Bug when combined with BrowserSync
 
-Currently (2019-11-17), there's a bug which causes BrowserSync to not start
-after compiling the code. There is a small hotfix for this, while this bug gets
-looked into.
+Currently **v1.1.1**, there's a bug which causes BrowserSync to not start
+after compiling the code. to get around that you can use `mix.versionHash()` like so
 
 ```js
-const mix = require('laravel-mix')
-
 // …
 
 if (mix.inProduction()) {
@@ -38,10 +46,3 @@ if (mix.inProduction()) {
   mix.versionHash()
 }
 ```
-
-## Options
-
-|   option  |  type  | default |                                            description                                            |
-|-----------|--------|---------|---------------------------------------------------------------------------------------------------|
-| length    | int    | `6`     | the hash string length                                                                            |
-| delimiter | string | `'.'`   | the delimiter for filename and hash, <br> note that anything other than `. - _` will be removed |
