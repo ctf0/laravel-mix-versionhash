@@ -104,7 +104,7 @@ class VersionHash {
                         loader.options.name = (path) => {
                             if (!/node_modules|bower_components/.test(path)) {
                                 return (
-                                    Config.fileLoaderDirs.images + `/[name].[hash:${length}].[ext]`
+                                    Config.fileLoaderDirs.images + `/[name]${delimiter}[hash:${length}].[ext]`
                                 )
                             }
 
@@ -130,7 +130,7 @@ class VersionHash {
                     if (loader.loader === 'file-loader') {
                         loader.options.name = (path) => {
                             if (!/node_modules|bower_components/.test(path)) {
-                                return Config.fileLoaderDirs.fonts + `/[name].[hash:${length}].[ext]`
+                                return Config.fileLoaderDirs.fonts + `/[name]${delimiter}[hash:${length}].[ext]`
                             }
 
                             return (
@@ -153,7 +153,7 @@ class VersionHash {
             if ('.cur'.match(new RegExp(rule.test))) {
                 forIn(rule.loaders, loader => {
                     if (loader.loader === 'file-loader') {
-                        loader.options.name = `[name].[hash:${length}].[ext]`
+                        loader.options.name = `[name]${delimiter}[hash:${length}].[ext]`
                     }
                 })
             }
