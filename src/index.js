@@ -59,6 +59,10 @@ class VersionHash {
      * @param {Object} webpackConfig
      */
     webpackConfig(webpackConfig) {
+        if (!this.options){
+            this.register({})
+        }
+
         const length = this.options.length
         const delimiter = this.getDelimiter()
 
@@ -188,6 +192,10 @@ class VersionHash {
      */
     registerHashAssets() {
         mix.listen('build', () => {
+            if (!this.options){
+                this.register({})
+            }
+
             let op_length = this.options.length
             const delimiter = escapeStringRegexp(this.getDelimiter())
             const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${op_length}})\\.([^.]+)$`, 'g')
