@@ -1,4 +1,4 @@
-const mix = require('laravel-mix')
+const laravel_mix = require('laravel-mix')
 const File = require('laravel-mix/src/File')
 const proxyMethod = require('proxy-method')
 const ConcatenateFilesTask = require('laravel-mix/src/tasks/ConcatenateFilesTask')
@@ -47,9 +47,9 @@ class VersionHash {
      */
     register(options = {}) {
         this.options = Object.assign({
-            length: 6,
+            length   : 6,
             delimiter: separator,
-            exclude: []
+            exclude  : []
         }, options)
     }
 
@@ -59,7 +59,7 @@ class VersionHash {
      * @param {Object} webpackConfig
      */
     webpackConfig(webpackConfig) {
-        if (!this.options){
+        if (!this.options) {
             this.register({})
         }
 
@@ -191,8 +191,8 @@ class VersionHash {
      * @return {this}
      */
     registerHashAssets() {
-        mix.listen('build', () => {
-            if (!this.options){
+        Mix.listen('build', () => {
+            if (!this.options) {
                 this.register({})
             }
 
@@ -201,7 +201,7 @@ class VersionHash {
             const removeHashFromKeyRegex = new RegExp(`${delimiter}([a-f0-9]{${op_length}})\\.([^.]+)$`, 'g')
             const removeHashFromKeyRegexWithMap = new RegExp(`${delimiter}([a-f0-9]{${op_length}})\\.([^.]+)\\.map$`, 'g')
 
-            const file = File.find(`${Config.publicPath}/${mix.manifest.name}`)
+            const file = File.find(`${Config.publicPath}/${Mix.manifest.name}`)
             let newJson = {}
 
             forIn(JSON.parse(file.read()), (value, key) => {
@@ -227,7 +227,7 @@ class VersionHash {
         this.combinedFiles = {}
 
         // hook into Mix's task collection to update file name hashes
-        proxyMethod.before(mix, 'addTask', (task) => {
+        proxyMethod.before(Mix, 'addTask', (task) => {
             if (task instanceof ConcatenateFilesTask) {
                 proxyMethod.after(task, 'merge', () => {
                     const file = task.assets.pop()
@@ -244,4 +244,4 @@ class VersionHash {
     }
 }
 
-mix.extend('versionHash', new VersionHash())
+laravel_mix.extend('versionHash', new VersionHash())
