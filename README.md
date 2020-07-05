@@ -28,21 +28,3 @@ mix.versionHash();
 |-----------|--------|---------|---------------------------------------------------------------------------------------------------|
 | length    | int    | `6`     | the hash string length                                                                            |
 | delimiter | string | `'.'`   | the delimiter for filename and hash, <br> note that anything other than `. - _` will be removed |
-
-
-
-## Known Issues
-
-### Bug when combined with BrowserSync
-
-Currently **v1.1.1**, there's a bug which causes BrowserSync to not start
-after compiling the code. to get around that you can use `mix.versionHash()` like so
-
-```js
-// …
-
-if (mix.inProduction()) {
-  require('laravel-mix-versionhash')
-  mix.versionHash()
-}
-```
