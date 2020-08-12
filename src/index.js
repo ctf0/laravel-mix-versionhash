@@ -227,7 +227,7 @@ class VersionHash {
         this.combinedFiles = {}
 
         // hook into Mix's task collection to update file name hashes
-        proxyMethod.before(Mix, 'addTask', (task) => {
+        forIn(Mix.tasks, (task) => {
             if (task instanceof ConcatenateFilesTask) {
                 proxyMethod.after(task, 'merge', () => {
                     const file = task.assets.pop()
