@@ -6,6 +6,7 @@ const forIn = require('lodash/forIn')
 const escapeStringRegexp = require('escape-string-regexp')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
+const collect = require('collect.js')
 const separator = '.'
 
 /**
@@ -212,7 +213,10 @@ class VersionHash {
                 newJson[key] = value
             })
 
-            file.write(newJson)
+            file.write(collect(newJson)
+                .sortKeys()
+                .all()
+            )
         })
 
         return this
