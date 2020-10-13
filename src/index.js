@@ -158,7 +158,7 @@ class VersionHash {
 
         return new class {
             apply(compiler) {
-                compiler.plugin('done', (stats) => {
+                compiler.hooks.done.tapAsync('done', (stats) => {
                     forIn(stats.compilation.assets, (asset, path) => {
                         if (combinedFiles[path]) {
                             delete stats.compilation.assets[path]
