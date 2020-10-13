@@ -86,14 +86,17 @@ class VersionHash {
         let contenthash = `[hash:${length}].css`
 
         forIn(webpackConfig.plugins, (value) => {
-            if (value instanceof MiniCssExtractPlugin && !value.filename.includes(contenthash)) {
-                let csspath = value.filename.substring(0, value.filename.lastIndexOf('.'))
-                let filename = `${csspath}${delimiter}${contenthash}`
-
-                if (value.filename != filename) {
-                    value.filename = filename
-                }
+            if (value instanceof MiniCssExtractPlugin) {
+                console.log(value);
             }
+//             if (value instanceof MiniCssExtractPlugin && !value.filename.includes(contenthash)) {
+//                 let csspath = value.filename.substring(0, value.filename.lastIndexOf('.'))
+//                 let filename = `${csspath}${delimiter}${contenthash}`
+
+//                 if (value.filename != filename) {
+//                     value.filename = filename
+//                 }
+//             }
         })
 
         /* Files Inside Css --------------------------------------------------------- */
