@@ -6,6 +6,12 @@
 
 Auto append hash to file instead of using virtual one [Read More](https://github.com/JeffreyWay/laravel-mix/issues/1022)
 
+
+### :exclamation: Looking For Maintainers :exclamation: 
+### as i dont have enough time to work on the package anymore, so anyone wants to join forces plz get in-touch, thanks.
+
+<br>
+
 ## Installation
 
 ```bash
