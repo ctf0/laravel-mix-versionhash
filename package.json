@@ -1,6 +1,6 @@
 {
     "license": "MIT",
-    "version": "1.1.7",
+    "version": "2.0.0",
     "author": "ctf0",
     "name": "laravel-mix-versionhash",
     "main": "src/index.js",
@@ -13,9 +13,9 @@
     "dependencies": {
         "proxy-method": "^1.0.0"
     },
-    "peerDependecies": {
-        "laravel-mix": "^2.0.0",
-        "collect.js": "^4.12.8"
+    "peerDependencies": {
+        "laravel-mix": "^6.0.0",
+        "collect.js": "^4.28.6"
     },
     "keywords": [
         "laravel",
