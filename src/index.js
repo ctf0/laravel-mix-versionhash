@@ -4,7 +4,7 @@ const proxyMethod = require('proxy-method')
 const ConcatenateFilesTask = require('laravel-mix/src/tasks/ConcatenateFilesTask')
 const forIn = require('lodash/forIn')
 const escapeStringRegexp = require('escape-string-regexp')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const collect = require('collect.js')
 const separator = '.'
@@ -86,12 +86,12 @@ class VersionHash {
         let contenthash = `[hash:${length}].css`
 
         forIn(webpackConfig.plugins, (value) => {
-            if (value instanceof ExtractTextPlugin && !value.filename.includes(contenthash)) {
-                let csspath = value.filename.substring(0, value.filename.lastIndexOf('.'))
+            if (value instanceof MiniCssExtractPlugin && !value.options.filename.includes(contenthash)) {
+                let csspath = value.options.filename.substring(0, value.options.filename.lastIndexOf('.'))
                 let filename = `${csspath}${delimiter}${contenthash}`
 
-                if (value.filename != filename) {
-                    value.filename = filename
+                if (value.options.filename != filename) {
+                    value.options.filename = filename
                 }
             }
         })
@@ -158,7 +158,7 @@ class VersionHash {
 
         return new class {
             apply(compiler) {
-                compiler.plugin('done', (stats) => {
+                compiler.hooks.done.tapAsync('done', (stats) => {
                     forIn(stats.compilation.assets, (asset, path) => {
                         if (combinedFiles[path]) {
                             delete stats.compilation.assets[path]
