@@ -73,7 +73,7 @@ class VersionHash {
         let usesExtract = webpackConfig.optimization && webpackConfig.optimization.runtimeChunk
         webpackConfig.output.filename = chunkhash
 
-        if (webpackConfig.output.chunkFilename && !usesExtract) {
+        if (typeof webpackConfig.output.chunkFilename != "function" && !usesExtract) {
             // merge chunkFilename paths
             let directory = path.dirname(webpackConfig.output.chunkFilename)
             webpackConfig.output.chunkFilename = `${directory}/${chunkhash}`
